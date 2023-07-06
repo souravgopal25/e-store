@@ -8,6 +8,8 @@ import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
+import java.util.List;
+
 @GrpcService
 public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
   UserService userService;
@@ -34,6 +36,23 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
         .setEmail(user.getEmail())
         .setDateOfBirth(user.getDateOfBirth())
         .build();
+  }
+
+  @Override
+  public void getAllUsers(EmptyRequest request, StreamObserver<UserDTO> responseObserver) {
+    try {
+      List<User> userList = userService.getAllUsers();
+      userList.stream()
+          .forEach(
+              user -> {
+                UserDTO userDTO = makeUserDtoFromUser(user);
+                responseObserver.onNext(userDTO);
+              });
+    } catch (Exception e) {
+      responseObserver.onError(Status.INTERNAL.withDescription(e.getMessage()).asException());
+    } finally {
+      responseObserver.onCompleted();
+    }
   }
 
   @Override

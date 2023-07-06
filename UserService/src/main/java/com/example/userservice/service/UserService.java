@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -51,5 +52,9 @@ public class UserService {
     }
     userRepository.delete(optionalUser.get());
     return new ResponseEntity<>(optionalUser.get(), HttpStatus.OK);
+  }
+
+  public List<User> getAllUsers() {
+    return userRepository.findAll();
   }
 }
