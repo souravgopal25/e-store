@@ -1,0 +1,61 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package com.example.userService;
+
+service UserService {
+  rpc Signup(UserDTO) returns (SignupResponse) {}
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {}
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {}
+  rpc GetUser(GetUserRequest)returns(UserDTO){}
+}
+
+message GetUserRequest{
+  int64 id=1;
+}
+
+
+
+message UserDTO {
+  int64 id = 1;
+  string email = 2;
+  string password = 3;
+  string first_name = 4;
+  string last_name = 5;
+  string date_of_birth = 6;
+}
+message SignupResponse {
+  bool success = 1;
+  string message = 2;
+  UserDTO user = 3;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  bool success = 1;
+  string message = 2;
+  string token = 3;
+}
+
+message DeleteUserRequest {
+  int64 id = 1;
+}
+
+message DeleteUserResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message UpdateUserRequest {
+  int64 id = 1;
+  UserDTO user = 2;
+}
+
+message UpdateUserResponse {
+  bool success = 1;
+  string message = 2;
+  UserDTO user = 3;
+}
