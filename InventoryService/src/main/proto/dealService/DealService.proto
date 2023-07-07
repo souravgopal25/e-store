@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package com.example.dealService;
+option java_multiple_files = true;
+import "google/protobuf/timestamp.proto"; // Importing Google's timestamp.proto
+
+message DealDTO {
+  int64 id = 1;
+  string name = 2;
+  int64 inventoryId = 3;
+  google.protobuf.Timestamp start_raising_date = 4;
+  google.protobuf.Timestamp close_raising_date = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+
+enum DiscountedState {
+  UNDISCOUNTED = 0;
+  PARTIALLY_DISCOUNTED = 1;
+  DISCOUNTED = 2;
+}
+
+enum InventoryState {
+  DRAFT = 0;
+  ACTIVELY_RAISING = 1;
+  SETTLEMENT_PENDING = 2;
+  SETTLEMENT_DONE = 3;
+  COLLECTIONS_DUE = 4;
+  DISBURSAL_PENDING = 5;
+  DELETED = 6;
+}
+message EmptyRequest{
+
+}
+
+service DealService {
+  rpc CreateDeal(CreateDealRequest) returns (CreateDealResponse);
+  rpc GetDeal(GetDealRequest) returns (GetDealResponse);
+  rpc UpdateDeal(UpdateDealRequest) returns (UpdateDealResponse);
+  rpc DeleteDeal(DeleteDealRequest) returns (DeleteDealResponse);
+  rpc GetAllDeals(EmptyRequest) returns(stream DealDTO);
+}
+
+message CreateDealRequest {
+  DealDTO deal = 1;
+}
+
+message CreateDealResponse {
+  DealDTO deal = 1;
+}
+
+message GetDealRequest {
+  int64 id = 1;
+}
+
+message GetDealResponse {
+  DealDTO deal = 1;
+}
+
+message UpdateDealRequest {
+  int64 id = 1;
+  DealDTO deal = 2;
+}
+
+message UpdateDealResponse {
+  DealDTO deal = 1;
+}
+
+message DeleteDealRequest {
+  int64 id = 1;
+}
+
+message DeleteDealResponse {
+  string message = 1;
+}
