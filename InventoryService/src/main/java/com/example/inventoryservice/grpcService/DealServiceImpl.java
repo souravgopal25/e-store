@@ -7,14 +7,11 @@ import com.example.inventoryservice.exception.DealNotFoundException;
 import com.example.inventoryservice.service.DealService;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
-import com.google.protobuf.Timestamp;
 import net.devh.boot.grpc.server.service.GrpcService;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.List;
 import java.util.Optional;
+
+import static com.example.inventoryservice.mapper.TimeMapper.getLocalDateTimeFromTimeStamp;
+import static com.example.inventoryservice.mapper.TimeMapper.getTimeStampFromLocalDateTime;
 
 @GrpcService
 public class DealServiceImpl extends DealServiceGrpc.DealServiceImplBase {
@@ -43,20 +40,7 @@ public class DealServiceImpl extends DealServiceGrpc.DealServiceImplBase {
                 .build();
     }
 
-    private LocalDateTime getLocalDateTimeFromTimeStamp(Timestamp timestamp) {
-        Instant instant = Instant.ofEpochSecond(timestamp.getSeconds(), timestamp.getNanos());
-        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        return localDateTime;
-    }
 
-    private Timestamp getTimeStampFromLocalDateTime(LocalDateTime localDateTime) {
-        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
-        Timestamp timestamp = Timestamp.newBuilder()
-                .setSeconds(instant.getEpochSecond())
-                .setNanos(instant.getNano())
-                .build();
-        return timestamp;
-    }
 
     @Override
     public void createDeal(CreateDealRequest request, StreamObserver<CreateDealResponse> responseObserver) {

@@ -24,7 +24,7 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     //Invoice Date
-    private Date date;
+    private LocalDateTime date;
     private BigDecimal amountExcludingGST;
     private BigDecimal gstRate;
     private BigDecimal gstAmount;

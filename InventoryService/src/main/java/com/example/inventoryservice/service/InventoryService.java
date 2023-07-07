@@ -1,6 +1,7 @@
 package com.example.inventoryservice.service;
 
 import com.example.inventoryservice.entity.Inventory;
+import com.example.inventoryservice.exception.InventoryNotFoundException;
 import com.example.inventoryservice.repository.InventoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,21 @@ public class InventoryService {
     }
 
 
-    public Inventory updateInventory(Inventory inventory) {
-        return inventoryRepository.save(inventory);
+    public Inventory updateInventory(Long id, Inventory updateInventory) {
+        return inventoryRepository.findById(id).map(
+                inventory -> {
+                    inventory.setId(id);
+                    inventory.setDate(updateInventory.getDate());
+                    inventory.setAmountExcludingGST(updateInventory.getAmountExcludingGST());
+                    inventory.setAmountIncludingGST(updateInventory.getAmountIncludingGST());
+                    inventory.setGstRate(updateInventory.getGstRate());
+                    inventory.setGstAmount(updateInventory.getGstAmount());
+                    inventory.setLink(updateInventory.getLink());
+                    inventory.setDiscountedState(updateInventory.getDiscountedState());
+                    inventory.setInventoryState(updateInventory.getInventoryState());
+                    return inventoryRepository.save(inventory);
+                }).orElseThrow(()->new InventoryNotFoundException(id));
+
     }
 
 
